@@ -1,0 +1,52 @@
+{
+    "name": "TankControlls",
+    "maps": [
+        {
+            "name": "Gameplay",
+            "id": "4d962d55-b051-4c0a-a3ab-e54c7b50593c",
+            "actions": [
+                {
+                    "name": "Move",
+                    "type": "Button",
+                    "id": "9d887212-0db0-4404-a81a-57a48fec834c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Aim",
+                    "type": "Button",
+                    "id": "8bf342e6-5d6e-4820-a1de-c05e97dc2bc1",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "5b999ec7-edad-40fc-a7bf-211ced26f9f7",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9656d540-d6b9-40f4-ae61-b9f08ed1da5b",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
