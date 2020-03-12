@@ -1,5 +1,5 @@
 {
-    "name": "TankControlls",
+    "name": "TankControls",
     "maps": [
         {
             "name": "Gameplay",
@@ -28,7 +28,7 @@
                     "id": "5b999ec7-edad-40fc-a7bf-211ced26f9f7",
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "AxisDeadzone",
                     "groups": "",
                     "action": "Move",
                     "isComposite": false,
@@ -39,7 +39,7 @@
                     "id": "9656d540-d6b9-40f4-ae61-b9f08ed1da5b",
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "AxisDeadzone",
                     "groups": "",
                     "action": "Aim",
                     "isComposite": false,
