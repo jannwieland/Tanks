@@ -31,8 +31,6 @@ public class PlayerTank : MonoBehaviour
 
         //setup turret reference
         turret = transform.GetChild(1);
-        //set default start orientation to "forward"
-        aimInput = new Vector2(turret.up.x, turret.up.z);
     }
 
     // Start is called on the frame when a script is enabled just before any of the Update methods are called the first time.
@@ -48,7 +46,7 @@ public class PlayerTank : MonoBehaviour
         if(movementInput != Vector2.zero)
         {
             Vector3 movementVector = new Vector3(movementInput.x, 0, movementInput.y);
-            float movementAngle = getMovementAngle(movementVector);
+            float movementAngle = getRelativeAngle(movementVector);
             float absMovementAngle = Mathf.Abs(movementAngle);
             Vector3 rotation = new Vector3(0,turnSpeed*Time.deltaTime*Mathf.Sign(movementAngle),0);
             
@@ -84,8 +82,9 @@ public class PlayerTank : MonoBehaviour
 
         if(aimInput != Vector2.zero)
         {
-            float aimAngle = getRotationAngle(aimInput);
-            turret.rotation = transform.rotation * Quaternion.AngleAxis(aimAngle, Vector3.forward);
+            Vector3 AimVector = new Vector3(aimInput.x, 0, aimInput.y);
+            float bodyAngle = getRelativeAngle(AimVector);
+            turret.rotation = transform.rotation * Quaternion.AngleAxis(bodyAngle, Vector3.forward);
         }        
     }
 
@@ -99,17 +98,10 @@ public class PlayerTank : MonoBehaviour
         controls.Gameplay.Disable();
     }
 
-    float getMovementAngle(Vector3 v)
+    float getRelativeAngle(Vector3 v)
     {
         float angle = Vector3.Angle(transform.up, v);
         if(Vector3.Angle(transform.right, v) < 90) angle*=-1;
-        return angle;
-    }
-
-    float getRotationAngle(Vector2 v)
-    {
-        float angle = Vector2.Angle(Vector2.right, v);
-        if(Vector2.Angle(Vector2.up, v) < 90) angle*=-1;
         return angle;
     }
 }
