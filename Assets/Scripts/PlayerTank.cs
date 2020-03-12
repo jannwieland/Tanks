@@ -10,6 +10,12 @@ public class PlayerTank : MonoBehaviour
     Vector2 aimInput; 
     Transform turret;
     Vector3 turretOffset;
+    public float turnSpeed = 5;
+    public float turnMultiplier = 2;
+    public float turnAngle = 45;
+    public float speed = 1;
+    public float reverseSpeed = 0.75f;
+    public float turnDelta = 2.5f;
 
     // Awake is called when the script instance is being loaded
     void Awake()
@@ -21,7 +27,7 @@ public class PlayerTank : MonoBehaviour
         controls.Gameplay.Move.canceled += ctx => movementInput = Vector2.zero;
 
         controls.Gameplay.Aim.performed += ctx => aimInput = ctx.ReadValue<Vector2>();
-        //controls.Gameplay.Aim.canceled += ctx => aimInput = Vector2.zero; 
+        controls.Gameplay.Aim.canceled += ctx => aimInput = Vector2.zero; 
 
         //setup turret reference
         turret = transform.GetChild(1);
@@ -39,13 +45,48 @@ public class PlayerTank : MonoBehaviour
     // Update is called every frame, if the MonoBehaviour is enabled
     void Update()
     {
-        Vector3 movementVector = new Vector3(movementInput.x, 0, movementInput.y) * Time.deltaTime;
-        transform.Translate(movementVector, Space.World);
+        if(movementInput != Vector2.zero)
+        {
+            Vector3 movementVector = new Vector3(movementInput.x, 0, movementInput.y);
+            float movementAngle = getMovementAngle(movementVector);
+            float absMovementAngle = Mathf.Abs(movementAngle);
+            Vector3 rotation = new Vector3(0,turnSpeed*Time.deltaTime*Mathf.Sign(movementAngle),0);
+            
+            if(absMovementAngle < 90-turnAngle) // forward
+            {
+                if(absMovementAngle > turnDelta)
+                { 
+                    transform.Translate(transform.up * speed * Time.deltaTime, Space.World);
+                    transform.Rotate(rotation, Space.World);
+                }
+                else
+                {
+                    transform.Translate(movementVector * speed * Time.deltaTime, Space.World);
+                }
+            }
+            else if(absMovementAngle > 90+turnAngle) // reverse
+            {
+                if(180-absMovementAngle > turnDelta)
+                { 
+                    transform.Translate(-transform.up * reverseSpeed * Time.deltaTime, Space.World);
+                    transform.Rotate(-rotation, Space.World);
+                }
+                else
+                {
+                    transform.Translate(movementVector * reverseSpeed * Time.deltaTime, Space.World);
+                }
+            } 
+            else //turn
+            {
+                transform.Rotate(turnMultiplier * rotation,Space.World);
+            }
+        }
 
-        turret.position = transform.position + transform.rotation * turretOffset;
-
-        float aimAngle = getRotationAngle(aimInput);
-        turret.rotation = transform.rotation * Quaternion.AngleAxis(aimAngle, Vector3.forward);        
+        if(aimInput != Vector2.zero)
+        {
+            float aimAngle = getRotationAngle(aimInput);
+            turret.rotation = transform.rotation * Quaternion.AngleAxis(aimAngle, Vector3.forward);
+        }        
     }
 
     void OnEnable()
@@ -56,6 +97,13 @@ public class PlayerTank : MonoBehaviour
     void OnDisable()
     {
         controls.Gameplay.Disable();
+    }
+
+    float getMovementAngle(Vector3 v)
+    {
+        float angle = Vector3.Angle(transform.up, v);
+        if(Vector3.Angle(transform.right, v) < 90) angle*=-1;
+        return angle;
     }
 
     float getRotationAngle(Vector2 v)
